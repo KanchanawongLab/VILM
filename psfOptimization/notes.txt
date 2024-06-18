@@ -1,0 +1,3 @@
+run showOptPSFs to visualize the OptZ PSF and VxZ PSF and their CRLBs.
+run optimalInterferPSFs to calculate the OptZ PSF and VxZ PSFs, multiple parameters can be changed inside, and the time to converge is quite long.
+* set the path to current folder to run the code.
