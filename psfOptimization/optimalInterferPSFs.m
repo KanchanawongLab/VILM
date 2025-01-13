@@ -15,6 +15,7 @@ global zpos
 global zern_p
 global AA bg
 global k0;
+global apod;
 
 
 %% basic parameters of the imaging system
@@ -22,7 +23,7 @@ na=1.33;  mag=60;lambda=0.670;
 %z=(0:0.1:1); % z's dimension should be 1*num_z1 
 d=50; d1=[]; d2=[];
 pix=7.2;  spix=pix/mag;
-fpupil=[]; nn1=5; 
+fpupil=[]; nn1=10; 
 spix=spix/1;  nn1=nn1*1;
 num_x=2*nn1+1;
 x0=0;y0=0; n1=1.52; n0=1.33;
@@ -44,7 +45,9 @@ kz_c1=CTF1.*sqrt((k0*n1)^2-kxx1.^2-kyy1.^2);
 kz_c2=CTF1.*sqrt((k0*n0)^2-kxx1.^2-kyy1.^2);
 do_apod=1;
 if do_apod==1
-apod=sqrt(kz_c1/(n1.*k0));
+ kz_c11=sqrt((k0*n1)^2-kxx1.^2-kyy1.^2);
+ apod=1./sqrt(kz_c11/(n1.*k0));
+%apod=sqrt(kz_c1/(n1.*k0));
 else 
     apod=ones(nn,nn);
 end
@@ -79,7 +82,7 @@ end
 zern_no_short=28-3+1;
 %choose random or zeros as the initial guess.
 fit_par_short(1:zern_no_short)=0.*rand(1,zern_no_short);
-obj_ipalmpsfoptim(0.*fit_par_short);
+obj_ipalmpsfoptim(1.*fit_par_short);
 
 lb(1:zern_no_short)=-3.*ones(1,zern_no_short); 
 ub(1:zern_no_short)= 3.*ones(1,zern_no_short);
@@ -89,14 +92,4 @@ options_psfoptim = optimoptions(@fmincon,'MaxIterations',100);
 Afmin=[];bfmin=[];
 Aeqfmin=[];beqfmin=[];
 fit_par_short=fmincon(@obj_ipalmpsfoptim,fit_par_short,Afmin,bfmin,Aeqfmin,beqfmin,lb,ub,[],options_psfoptim);   
-
-
-
-
-
-
-
-
-
-
 
