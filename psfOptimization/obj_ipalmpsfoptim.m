@@ -143,7 +143,7 @@ CRLB=sqrt(CRLB);
 
 %% calculate the weighted CRLB
 crlbout=sum(CRLB(:));
-crlbout=crlbout/120+max(CRLB(3,:));
+crlbout=crlbout/180+max(CRLB(3,:));
 
 %% monitor whether it decreased during the optimization
 disp(crlbout)
