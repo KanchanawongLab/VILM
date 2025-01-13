@@ -2,10 +2,15 @@
 clear all
 close all
 
-load('optMasks.mat')
+load('optMasks2.mat')
 global addvortex %add vortex means whether to optimize with vortex phase mask   % default 0, geenerate optz psf, 1 is set to generate vxz psf.
 global showPSFs; % whether to show PSFs,  0, not display, 1 display psfs and crlb.
 
+
+%% show the OptZ PSfs
+showPSFs=1; addvortex=1;
+paraset();
+obj_ipalmpsfoptim(0.*maskOptZ);
 
 
 %% show the OptZ PSfs
@@ -26,14 +31,15 @@ global zpos
 global zern_p
 global AA bg
 global k0;
+global apod
 
 %% basic parameters of the imaging system
 na=1.33;  mag=60;lambda=0.670; 
 %z=(0:0.1:1); % z's dimension should be 1*num_z1 
 d=50; d1=[]; d2=[];
 pix=7.2;  spix=pix/mag;
-fpupil=[]; nn1=5; 
-spix=spix/1;  nn1=nn1*1;
+fpupil=[]; nn1=10; 
+spix=spix;  nn1=nn1;
 num_x=2*nn1+1;
 x0=0;y0=0; n1=1.52; n0=1.33;
 k0=2*pi/lambda; kmax=k0*na;
@@ -54,7 +60,9 @@ kz_c1=CTF1.*sqrt((k0*n1)^2-kxx1.^2-kyy1.^2);
 kz_c2=CTF1.*sqrt((k0*n0)^2-kxx1.^2-kyy1.^2);
 do_apod=1;
 if do_apod==1
-apod=sqrt(kz_c1/(n1.*k0));
+ kz_c11=sqrt((k0*n1)^2-kxx1.^2-kyy1.^2);
+ apod=1./sqrt(kz_c11/(n1.*k0));
+%apod=sqrt(kz_c1/(n1.*k0));
 else 
     apod=ones(nn,nn);
 end
@@ -86,11 +94,3 @@ for p=3:35
 end
 
 end
-
-
-
-
-
-
-
-
