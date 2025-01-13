@@ -46,20 +46,21 @@ kz_c1=CTF1.*sqrt((k0*n1)^2-kxx1.^2-kyy1.^2);
 kz_c2=CTF1.*sqrt((k0*n0)^2-kxx1.^2-kyy1.^2);
 % define the apodization function for calculating the excitation point
 % spread function
+
 do_apod=1;
 if do_apod==1
-apod=sqrt(kz_c1/(n1.*k0));
+kz_c11=sqrt((k0*n1)^2-kxx1.^2-kyy1.^2);
+apod=1./sqrt(kz_c11/(n1.*k0));
 else 
-    apod=ones(num_x,num_x);
+    apod=ones(NN,NN);
 end
-
 
 %% calculating the PSFsz range -150nm to 150nm
 dz=0.003;
 zpos=(-50:50).*dz;
 
-ddxy=0.01; % 10nm
-ddz=1e-3;  %1nm
+ddxy=1e-4; % 0.1nm
+ddz=1e-4;  %0.1nm
 x0=0; y0=0;
 z=0;
 z1=0;z2=0;
